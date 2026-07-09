@@ -1,5 +1,11 @@
 # BharatCoin (BHRT)
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Status](https://img.shields.io/badge/status-testnet%20%C2%B7%20pre--launch-orange.svg)](#honest-disclosures)
+[![Solidity](https://img.shields.io/badge/solidity-0.8.20-363636.svg)](contracts/BharatCoinToken.sol)
+[![Sepolia: source verified](https://img.shields.io/badge/Sepolia-source%20verified-brightgreen.svg)](https://sepolia.etherscan.io/address/0x36afd10e97f16d4dec3d05691d4276c408e0aca1#code)
+[![Security: report a bug](https://img.shields.io/badge/security-report%20a%20bug-red.svg)](SECURITY.md)
+
 > **Status: pre-launch, testnet-only.** BharatCoin is **not live for real funds**. Nothing in
 > this repository is an offer to sell, financial advice, or a promise of value. See
 > [Honest disclosures](#honest-disclosures).

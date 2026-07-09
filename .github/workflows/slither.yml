@@ -1,0 +1,41 @@
+name: Slither
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  slither:
+    name: Static analysis (Slither)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies (needed to resolve @openzeppelin imports)
+        run: npm install
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Slither + solc 0.8.20
+        run: |
+          python -m pip install --upgrade pip
+          pip install slither-analyzer solc-select
+          solc-select install 0.8.20
+          solc-select use 0.8.20
+
+      - name: Run Slither (fail only on HIGH-severity findings)
+        run: |
+          slither contracts/ \
+            --exclude-dependencies \
+            --solc-remaps '@openzeppelin/=node_modules/@openzeppelin/' \
+            --fail-high

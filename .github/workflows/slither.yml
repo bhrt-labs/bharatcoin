@@ -19,23 +19,15 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install dependencies (needed to resolve @openzeppelin imports)
+      - name: Install dependencies (resolves @openzeppelin imports)
         run: npm install
 
-      - uses: actions/setup-python@v5
+      - name: Install Foundry (used only to compile for Slither)
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Run Slither
+        uses: crytic/slither-action@v0.4.0
         with:
-          python-version: "3.11"
-
-      - name: Install Slither + solc 0.8.20
-        run: |
-          python -m pip install --upgrade pip
-          pip install slither-analyzer solc-select
-          solc-select install 0.8.20
-          solc-select use 0.8.20
-
-      - name: Run Slither (fail only on HIGH-severity findings)
-        run: |
-          slither contracts/ \
-            --exclude-dependencies \
-            --solc-remaps '@openzeppelin/=node_modules/@openzeppelin/' \
-            --fail-high
+          target: "."
+          slither-args: "--exclude-dependencies"
+          fail-on: high

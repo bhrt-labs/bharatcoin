@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-test:
+    name: Compile, smoke-test & verify reproducibility
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Compile contracts + local smoke test (dry-run deploy)
+        # Runs a local in-memory chain, deploys the token + vesting, and asserts
+        # total supply, the 17% founder vesting, and the 83% Safe allocation.
+        run: node scripts/deploy-token.js
+
+      - name: Verify the committed Etherscan source bundle reproduces byte-for-byte
+        # Regenerates verify-token-input.json from the pinned deps and fails if it
+        # differs from the committed copy that matches the on-chain verified source.
+        run: |
+          node scripts/gen-verify-input.js
+          git diff --exit-code verify-token-input.json

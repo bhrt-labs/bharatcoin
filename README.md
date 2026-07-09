@@ -1,5 +1,6 @@
 # BharatCoin (BHRT)
 
+[![CI](https://github.com/bhrt-labs/bharatcoin/actions/workflows/ci.yml/badge.svg)](https://github.com/bhrt-labs/bharatcoin/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-testnet%20%C2%B7%20pre--launch-orange.svg)](#honest-disclosures)
 [![Solidity](https://img.shields.io/badge/solidity-0.8.20-363636.svg)](contracts/BharatCoinToken.sol)

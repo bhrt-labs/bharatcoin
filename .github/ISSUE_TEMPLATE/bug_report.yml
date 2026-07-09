@@ -1,0 +1,37 @@
+name: Bug report
+description: Report a non-security bug (functionality, docs, or scripts). NOT for security vulnerabilities.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ **Security vulnerabilities do NOT belong here.** Anything that could let someone
+        mint, steal, freeze, or lock tokens, or break the supply/vesting rules, must be reported
+        **privately** — see [SECURITY.md](../../SECURITY.md) or use **"Report a vulnerability"**
+        in the **Security** tab. Public security issues will be closed.
+  - type: checkboxes
+    attributes:
+      label: Confirmation
+      options:
+        - label: This is NOT a security vulnerability (those are reported privately).
+          required: true
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+  - type: textarea
+    attributes:
+      label: What happened?
+      description: A clear description of the bug and what you expected to happen instead.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      description: Exact steps, commands, or a minimal example someone else can follow.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Environment
+      description: Node.js version, OS, and anything else relevant.
+    validations:
+      required: false

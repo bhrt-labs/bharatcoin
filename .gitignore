@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Secrets & env — NEVER commit
+.env
+.env.*
+*.pem
+*.key
+wallet.key
+
+# Build / tooling output
+artifacts/
+cache/
+out/
+
+# OS / editor
+Thumbs.db
+.DS_Store
+.vscode/
+.idea/

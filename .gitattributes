@@ -1,0 +1,9 @@
+# Store and check out all text files with LF line endings, so the repository is
+# byte-consistent and reproducible on every OS (Windows/macOS/Linux).
+* text=auto eol=lf
+
+*.sol   text eol=lf
+*.js    text eol=lf
+*.rs    text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf

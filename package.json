@@ -1,0 +1,18 @@
+{
+  "name": "bharatcoin",
+  "version": "1.0.0",
+  "private": false,
+  "license": "MIT",
+  "description": "BharatCoin (BHRT) — fixed-supply ERC-20 + Safe-based defense-in-depth wallet (testnet, pre-launch).",
+  "scripts": {
+    "verify-input": "node scripts/gen-verify-input.js",
+    "check-chain": "node scripts/verify-helper.js",
+    "deploy-token": "node scripts/deploy-token.js"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts": "5.0.0",
+    "ethers": "^6.13.0",
+    "ganache": "^7.9.2",
+    "solc": "0.8.20"
+  }
+}

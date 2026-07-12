@@ -87,14 +87,18 @@ Reproducing the bundle byte-for-byte requires the pinned deps (`@openzeppelin/co
 `solc` **0.8.20**); the committed [`verify-token-input.json`](verify-token-input.json) is the
 authoritative copy that matches the on-chain source.
 
-## Post-quantum: honest R&D, not a shipped claim
+## Post-quantum: a reference verifier (honest R&D)
 
-We built a **from-scratch, NIST ACVP-conformant (45/45) post-quantum ML-DSA-65 verifier** — but
-we do **not** market BharatCoin as "quantum-safe," and it is **not** a shipped
-feature (verifying a post-quantum signature on-chain costs far more than a single transaction's
-gas budget allows). The work continues **openly as a public good** in [`pq-zk/`](pq-zk/README.md)
-and [`docs/ZK_ROADMAP.md`](docs/ZK_ROADMAP.md), for the day a cheap on-chain proof (zk) makes it
-real. See the [one-pager](docs/BHARATCOIN_ONEPAGER.md) for the plain-English version.
+`pq-zk/` contains a **from-scratch, NIST ACVP-conformant (45/45) ML-DSA-65 verifier** in Rust —
+a **reference / learning** implementation. It is **not** a shipped feature, and BharatCoin is
+**not** marketed as "quantum-safe."
+
+On-chain post-quantum signature verification is already an **active, largely-solved** area — see
+[ZKNox ETHDILITHIUM](https://github.com/ZKNoxHQ/ETHDILITHIUM) (direct on-chain ML-DSA verification
+that fits within the per-transaction gas limit), zkVM-based approaches (e.g. Dilithium verification
+proven in SP1), and [EIP-8051](https://eips.ethereum.org/EIPS/eip-8051) (a proposed ML-DSA
+precompile). This repo's verifier is a reference for learning and conformance-checking, **not** a
+novel solution. Context + links: [`docs/ZK_ROADMAP.md`](docs/ZK_ROADMAP.md).
 
 ## Honest disclosures
 

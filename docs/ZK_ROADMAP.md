@@ -1,67 +1,34 @@
-# Post-Quantum Signature Verification via zkVM — Roadmap (R&D / Public Good)
+# On-chain post-quantum signature verification — context & prior art
 
-> **Honest status:** research & development. Nothing here is production-ready or a shipped
-> guarantee. A novel zk proving pipeline needs its **own specialist audit** before it could
-> ever guard real funds. This is the plan; the value is in doing it openly.
+> **Honest status:** this file originally proposed making on-chain ML-DSA verification cheap via a
+> zkVM. On closer investigation, on-chain post-quantum verification is already an active,
+> well-developed area, and the approaches below already exist. This document now records that
+> context, so the [`pq-zk/`](../pq-zk/README.md) verifier is understood as a **reference / learning
+> implementation**, not a novel solution.
 
-## The problem it solves
+## The landscape (existing work)
 
-On-chain post-quantum (ML-DSA / FIPS-204) signature verification costs ~87M gas — **over
-EIP-7825's ~16.78M per-transaction cap**, so it cannot run directly on modern L2s. Every
-chain will hit this same wall as the ecosystem moves post-quantum. A way to verify a PQ
-signature *cheaply* on-chain is a primitive **the whole ecosystem will need before Q-day.**
+- **Direct on-chain verification already fits the gas budget.**
+  [ZKNox ETHDILITHIUM](https://github.com/ZKNoxHQ/ETHDILITHIUM) implements ML-DSA / Dilithium
+  verification in Solidity that runs within the EIP-7825 per-transaction gas limit (a
+  NIST-compliant version and an EVM-tuned keccak256 variant). See also
+  [ETHFALCON](https://github.com/ZKNoxHQ/ETHFALCON).
+- **zkVM approaches exist.** Dilithium signature verification has been implemented as a zkVM guest
+  (e.g. in SP1), producing a succinct proof that is checked cheaply on-chain.
+- **A native precompile is proposed.** [EIP-8051](https://eips.ethereum.org/EIPS/eip-8051)
+  (ML-DSA verification precompile) targets a native, low-gas path.
+- **Account-abstraction integration** is being explored on ethresear.ch (e.g. asanso's series) so
+  smart accounts can adopt post-quantum signatures without a protocol change.
 
-## The idea (why it's reachable)
+## What `pq-zk/` is (and isn't)
 
-We already have a **NIST ACVP-conformant ML-DSA-65 verifier in Rust** (validated 45/45
-against the official vectors — see
-[../pq-zk/vectors/ACVP_CONFORMANCE.md](../pq-zk/vectors/ACVP_CONFORMANCE.md)). A **zkVM**
-(RISC Zero or SP1) can take *existing Rust code*, run it, and produce a succinct proof that it
-executed correctly — **without hand-writing an exotic lattice circuit** (the frontier-research
-part that is easy to get catastrophically wrong).
+- It **is**: a clean, from-scratch, NIST-ACVP-conformant (45/45) ML-DSA-65 verifier in Rust — a
+  reference implementation with reproducible conformance results.
+- It is **not**: a novel or cheaper on-chain verifier. The problem it originally set out to solve
+  is already addressed by the work above.
 
-```
-off-chain:  (pk, msg, sig) ──▶ [zkVM runs our Rust ML-DSA verify] ──▶ proof "it returned true"
-on-chain:   verify(proof)  ~300k gas  ✅ fits the per-tx cap
-```
+## A possible honest direction
 
-So we **reuse proven code** and move the heavy work off-chain, leaving only a cheap proof
-check on-chain. This is the pragmatic, honest path — not a hand-rolled circuit.
-
-## Why a zkVM, not a hand-written circuit
-
-| | zkVM (RISC Zero / SP1) — chosen | Hand-written circuit (Circom/Halo2/Noir) |
-|---|---|---|
-| Reuses our audited-in-spirit Rust verifier | ✅ yes | ❌ rewrite from scratch |
-| Frontier-research risk (NTT, rejection sampling in-circuit) | avoided | ❌ high, solo-unsafe |
-| Proof generation cost | heavy (minutes, RAM-hungry) | lighter |
-| On-chain verification cost | cheap (~300k gas) | cheap |
-| Solo-buildable | plausible (esp. via hosted prover) | no |
-
-## Honest constraints
-
-- The RISC Zero / SP1 toolchains are **large Rust installs + prebuilt prover binaries** that
-  likely won't fetch in a restricted/offline environment. Use a **hosted prover** (e.g. RISC
-  Zero's Bonsai) to generate proofs without a heavy local setup.
-- Proving a full ML-DSA verify is **RAM- and time-heavy** to generate (the *verification* of
-  the resulting proof is what's cheap).
-- The zkVM **guest program + on-chain verifier still need a specialist audit** before funds.
-
-## Milestones
-
-1. **M1 — Educational prototype (hosted prover).** Prove a *tiny* computation end-to-end
-   (e.g. "I know x such that hash(x)=y") and verify it on-chain (~300k gas). Goal: own a real,
-   running "magic proof" and understand the mechanics. *(Not the ML-DSA circuit.)*
-2. **M2 — Verifier as a zkVM guest.** Compile our Rust `verify_fips204` (from
-   [`../pq-zk/verifier/verify_fips204.rs`](../pq-zk/verifier/verify_fips204.rs)) as a zkVM
-   guest; prove one real ACVP vector off-chain.
-3. **M3 — On-chain proof verification.** Deploy the zkVM's proof verifier; check an M2 proof
-   on-chain; confirm it fits the per-tx gas cap.
-4. **M4 — Package as a public good.** Standalone open-source repo + spec/EIP-style writeup;
-   pursue a PQ/zk research grant; then a specialist audit before any funds.
-
-## Repository
-
-This lives as its own standalone project: [`pq-zk/`](../pq-zk/README.md) — deliberately
-**unbundled from BharatCoin**, because an open ACVP-conformant, zkVM-provable ML-DSA verifier
-is valuable to the whole ecosystem regardless of whether the coin succeeds.
+Lattice verifiers are subtle (NTT, rejection sampling, encoding edge cases), so an independent
+ACVP-conformance / differential test across the existing implementations could be genuinely useful
+— **if** it isn't already being done. That is the only direction here worth pursuing further.

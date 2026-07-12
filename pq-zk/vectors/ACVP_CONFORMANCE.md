@@ -31,8 +31,8 @@ vector is accepted — across all three signature-interface modes NIST defines.
 
 ## Scope / honesty
 
-- This proves **standard conformance of the verifier logic**. It does **not** by itself make a
-  cheap on-chain verifier — see [`../README.md`](../README.md) and
-  [`../../docs/ZK_ROADMAP.md`](../../docs/ZK_ROADMAP.md) for the zkVM path.
+- This proves **standard conformance of the verifier logic** — nothing more. On-chain
+  post-quantum verification already exists elsewhere; see [`../README.md`](../README.md) and
+  [`../../docs/ZK_ROADMAP.md`](../../docs/ZK_ROADMAP.md) for context and prior art.
 - ACVP conformance is necessary, not sufficient: an **independent professional audit** and
   **gas optimization** remain before this could ever guard real funds.

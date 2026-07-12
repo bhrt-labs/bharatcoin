@@ -50,16 +50,16 @@ transfers wait a day or two** and can be **cancelled**, there's a **freeze butto
 
 ## About "quantum" (honest)
 
-We built a **from-scratch, NIST-conformant post-quantum (ML-DSA-65) verifier** — but we do
-**not** market BharatCoin as "quantum-safe," and it is **not** a shipped feature:
-- Verifying a post-quantum signature on-chain costs several times more than a single
-  transaction is even allowed to use (the EIP-7825 gas cap), so it can't run per-transfer.
-- And on a classically-secured chain, quantum protection on one wallet wouldn't hold anyway.
+`pq-zk/` contains a **from-scratch, NIST-conformant ML-DSA-65 verifier** — a reference / learning
+implementation. We do **not** market BharatCoin as "quantum-safe," and it is **not** a shipped
+feature. (On a classically-secured chain, a post-quantum key on one wallet wouldn't add real
+protection anyway.)
 
-So the post-quantum work continues **openly as R&D / a public good** (see
-[ZK_ROADMAP.md](ZK_ROADMAP.md) and the standalone [`pq-zk/`](../pq-zk/README.md) project), for
-the day a cheap on-chain proof (zk) or a native precompile makes it real. It is **not** part
-of the shipped product's safety promise.
+On-chain post-quantum verification is already an active, well-developed area — see
+[ZK_ROADMAP.md](ZK_ROADMAP.md) for context and links (ZKNox ETHDILITHIUM does direct on-chain
+ML-DSA verification within the gas limit; zkVM approaches and a proposed precompile, EIP-8051,
+exist too). This repo's verifier is a reference implementation, **not** a novel solution, and is
+not part of the shipped product's safety promise.
 
 ## Honest disclosures (please read)
 
@@ -76,6 +76,6 @@ of the shipped product's safety promise.
   Ethereum Sepolia testnet.**
 - Wallet: **Safe-based** defense-in-depth design + testnet setup guide (no custom
   money-holding code — you inherit Safe's audits).
-- Post-quantum: an **ACVP-conformant (45/45) ML-DSA-65 verifier** exists as open R&D; a
-  zkVM/precompile path is roadmapped, not shipped.
+- Post-quantum: a **from-scratch, ACVP-conformant (45/45) ML-DSA-65 reference verifier** exists in
+  `pq-zk/` (learning/reference only — on-chain PQ verification is already solved elsewhere).
 - **Not yet:** a funded bug bounty, an independent audit, and a legal review.
